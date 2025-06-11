@@ -46,6 +46,15 @@ on:
       private_modules_access_token:
         description: Private terraform modules access token
         required: false
+      aws_region_name:
+        description: AWS Region
+        required: false
+      backend_bucket:
+        description: "The S3 bucket to use as terraform backend"
+        required: true
+      repository_name:
+        description: "The repository name"
+        required: true
       
       
 jobs:
@@ -69,8 +78,11 @@ jobs:
 
       - name: Terraform
         working-directory: ${{ inputs.terraform_relative_dir }}
-        run: |
-          terraform init
+        run: terraform init
+          -backend-config bucket=${{ secrets.backend_bucket }}
+          -backend-config region=${{ secrets.aws_region_name }}
+          -backend-config key=tf-state.json
+          -backend-config workspace_key_prefix=${{ secrets.repository_name }} -input=false
 
       - name: Configure git
         run: |
