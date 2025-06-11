@@ -38,6 +38,10 @@ on:
         default: true
         required: false
         description: Whether to update the READMEs of each module with the Inkdrop diagram
+      github_token:
+        type: string
+        required: false
+        description: "GitHub token for accessing private repositories"
       
       
 jobs:
@@ -52,6 +56,13 @@ jobs:
         with:
           terraform_version: ${{ inputs.terraform_version }}
           terraform_wrapper: false
+
+      - name: Setup private repo access
+        if: ${{ inputs.github_token }}
+        run: |
+          git config --global url."https://${{ inputs.github_token }}@github.com".insteadOf "https://github.com"
+        env:
+          GITHUB_TOKEN: ${{ inputs.github_token }}
 
       - name: Terraform
         working-directory: ${{ inputs.terraform_relative_dir }}
