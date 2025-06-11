@@ -43,7 +43,7 @@ on:
         required: false
         description: "GitHub token for accessing private repositories"
     secrets:
-      github_token:
+      private-modules-access-token:
         description: Private terraform modules access token
         required: false
       
@@ -63,8 +63,8 @@ jobs:
 
       - name: Setup private repo access
         run: |
-          if [ -n "${{ secrets.github_token }}" ]; then
-            git config --global url."https://${{ secrets.github_token }}@github.com".insteadOf "https://github.com"
+          if [ -n "${{ secrets.private_modules_access_token }}" ]; then
+            git config --global url."https://${{ secrets.private_modules_access_token }}@github.com".insteadOf "https://github.com"
           fi
 
       - name: Terraform
