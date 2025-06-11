@@ -43,7 +43,7 @@ on:
         required: false
         description: "GitHub token for accessing private repositories"
     secrets:
-      private-modules-access-token:
+      private_modules_access_token:
         description: Private terraform modules access token
         required: false
       
