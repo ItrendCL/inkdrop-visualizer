@@ -76,13 +76,9 @@ jobs:
             git config --global url."https://${{ secrets.private_modules_access_token }}@github.com".insteadOf "https://github.com"
           fi
 
-      - name: Terraform
-        working-directory: ${{ inputs.terraform_relative_dir }}
-        run: terraform init
-          -backend-config bucket=${{ secrets.backend_bucket }}
-          -backend-config region=${{ secrets.aws_region_name }}
-          -backend-config key=tf-state.json
-          -backend-config workspace_key_prefix=${{ secrets.repository_name }} -input=false
+      - name: Initialize terraform for Inkdrop (no backend)
+        run: terraform init -backend=false -input=false
+        working-directory: iac
 
       - name: Configure git
         run: |
