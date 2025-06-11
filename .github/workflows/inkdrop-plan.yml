@@ -42,6 +42,10 @@ on:
         type: string
         required: false
         description: "GitHub token for accessing private repositories"
+    secrets:
+      github_token:
+        description: Private terraform modules access token
+        required: false
       
       
 jobs:
@@ -58,11 +62,10 @@ jobs:
           terraform_wrapper: false
 
       - name: Setup private repo access
-        if: ${{ inputs.github_token }}
         run: |
-          git config --global url."https://${{ inputs.github_token }}@github.com".insteadOf "https://github.com"
-        env:
-          GITHUB_TOKEN: ${{ inputs.github_token }}
+          if [ -n "${{ secrets.github_token }}" ]; then
+            git config --global url."https://${{ secrets.github_token }}@github.com".insteadOf "https://github.com"
+          fi
 
       - name: Terraform
         working-directory: ${{ inputs.terraform_relative_dir }}
